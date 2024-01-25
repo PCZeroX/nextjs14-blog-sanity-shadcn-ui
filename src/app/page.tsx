@@ -3,13 +3,15 @@ import Image from "next/image";
 
 import { urlFor } from "@/lib/sanity";
 
-import { getData } from "@/data/get-data";
+import { getBlogData } from "@/data/sanity-data";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+export const revalidate = 30; // revalidate at most 30 seconds
+
 const HomePage = async () => {
-  const data = await getData();
+  const data = await getBlogData();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
