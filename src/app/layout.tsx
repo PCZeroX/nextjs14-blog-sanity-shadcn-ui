@@ -18,8 +18,11 @@ const ThemeProvider = dynamic(
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: siteConfig.name,
-  description: `%s | ${siteConfig.description}`,
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
   icons: [
     {
       url: "/favicon.ico",
@@ -40,7 +43,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         >
           <Navbar />
           <div>
-            <div className="container mx-auto">{children}</div>
+            <div className="container mx-auto py-12">{children}</div>
           </div>
         </ThemeProvider>
       </body>

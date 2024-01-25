@@ -1,26 +1,45 @@
-const getData = async () => {
-  const query = `
-    *[_type == 'blog'] | order(_createdAt desc) {
-    title,
-      smallDescription,
-      "currentSlug": slug.current
-    }
-  `;
+import Link from "next/link";
+import Image from "next/image";
 
-  return query;
-};
+import { urlFor } from "@/lib/sanity";
 
-const HomePage = () => {
+import { getData } from "@/data/get-data";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+const HomePage = async () => {
+  const data = await getData();
+
   return (
-    <main>
-      <p>Home Page</p>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id, at?
-        Debitis molestiae natus eligendi ea ex et, iusto perspiciatis nostrum,
-        fugit cupiditate beatae. Necessitatibus ut beatae numquam optio. Nobis,
-        ex.
-      </p>
-    </main>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+      {data.map((post) => (
+        <Card key={post.currentSlug} className="flex flex-col gap-y-4">
+          <div className="relative h-[200px]">
+            <Image
+              src={urlFor(post.titleImage).url()}
+              alt={"image card"}
+              className="object-cover object-center rounded-t-lg"
+              priority
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
+
+          <CardContent className="flex flex-col gap-y-4 flex-1">
+            <h3 className="text-lg line-clamp-2 2xl:line-clamp-3 font-bold">
+              {post.title}
+            </h3>
+            <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-300 flex-1">
+              {post.smallDescription}
+            </p>
+            <Button asChild className="w-full">
+              <Link href={`/blog/${post.currentSlug}`}>Read More</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 };
 
